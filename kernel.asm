@@ -13,16 +13,23 @@ _start:
 
 ; Kernel main function
 kernel_main:
+    cli                      ; disable interrupts while we setup stack
+    
+    ; Set up a safe stack (avoid overlapping boot sector area)
+    xor ax, ax
+    mov ss, ax
+    mov sp, 0x8000
+
     mov ax, cs
     mov ds, ax
     mov es, ax
-    
+
     ; Initialize Interrupt Descriptor Table
     call init_idt
-    
+
     ; Initialize memory management
     call init_memory
-    
+
     ; Enable interrupts
     sti
     
@@ -58,20 +65,25 @@ read_command:
     mov di, command_buffer
     xor cx, cx
 .read_loop:
-    mov ah, 0x00
+.read_wait:
+    mov ah, 0x00         ; BIOS: Read keystroke (wait)
     int 0x16
-    cmp al, 13          ; Enter key
+    ; AL = ASCII, AH = scan code
+    cmp al, 13           ; Enter key (CR)
     je .done
-    cmp al, 8           ; Backspace
+    cmp al, 8            ; Backspace
     je .backspace
-    cmp cx, 50          ; Max length
+    cmp al, 0            ; ignore null
     je .read_loop
+    cmp cx, 50           ; Max length (reserve 1 for NUL)
+    jae .read_loop
     mov [di], al
     inc di
     inc cx
+    ; Echo character to screen
     mov ah, 0x0e
     int 0x10
-    jmp .read_loop
+    jmp .read_wait
 .backspace:
     cmp cx, 0
     je .read_loop
