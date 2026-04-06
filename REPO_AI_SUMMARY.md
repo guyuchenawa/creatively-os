@@ -7,6 +7,8 @@
 - 目标：一个简单的 16 位实模式操作系统（MBR 引导 + 简单内核）。
 - 主要语言：x86 汇编（NASM 格式）。
 
+重要声明：本仓库内容已由 AI 完全生成（包括源代码、构建与备份脚本、文档和发布说明）。开发者负责触发、审核与发布该内容。
+
 关键文件
 - `boot.asm` - 启动扇区（MBR），org 0x7c00，生成 `boot.bin`。
 - `kernel.asm` - 内核代码，org 0x1000，生成 `kernel.bin`。
@@ -36,3 +38,4 @@ build.ps1` 或 `build.bat`。
 
 维护者备注
 - 该仓库已在 Windows 环境下测试，NASM 已通过 Chocolatey 安装。
+ - 许可证：GPL-3.0-or-later
