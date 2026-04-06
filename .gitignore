@@ -1,0 +1,18 @@
+# Build artifacts
+boot.bin
+kernel.bin
+os.img
+
+# Backups
+backup/
+tools/backup/
+
+# OS-specific
+*.vmdk
+*.lck
+
+# VS Code
+.vscode/
+
+# Memory files (local assistant)
+/memories/
